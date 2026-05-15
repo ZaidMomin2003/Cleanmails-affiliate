@@ -4,7 +4,7 @@
 
 /* Page Header */
 .page-header {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .page-title-row {
@@ -88,8 +88,8 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
@@ -429,7 +429,7 @@
   background: var(--bg-card);
   border-radius: var(--radius);
   padding: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   border: 1px solid var(--border-card);
 }
 

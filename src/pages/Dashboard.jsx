@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
+import { db } from '../lib/firebase'
 import { useAuth } from '../context/AuthContext'
 import { getReferralLinks, getPurchases, createReferralLink } from '../lib/database'
 import './Dashboard.css'
@@ -63,6 +65,8 @@ function Dashboard() {
   const [copiedId, setCopiedId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
+  const [myRank, setMyRank] = useState(null)
+  const [salesToFirst, setSalesToFirst] = useState(0)
 
   useEffect(() => {
     if (user) loadData()
@@ -77,6 +81,18 @@ function Dashboard() {
       ])
       setLinks(linksData)
       setPurchases(purchasesData)
+
+      // Load rank
+      const lbQuery = query(collection(db, 'affiliates'), orderBy('totalEarned', 'desc'), limit(50))
+      const lbSnap = await getDocs(lbQuery)
+      const ranked = lbSnap.docs.map(d => d.id)
+      const rank = ranked.indexOf(user.uid)
+      setMyRank(rank >= 0 ? rank + 1 : null)
+      if (rank > 0) {
+        const topEarned = lbSnap.docs[0].data().totalEarned || 0
+        const myEarned = profile?.totalEarned || 0
+        setSalesToFirst(Math.max(0, Math.floor((topEarned - myEarned) / 100)))
+      }
     } catch (e) {
       console.warn('Failed to load data:', e.message)
     }
@@ -186,11 +202,11 @@ function Dashboard() {
           <div className="drc-icon"><Trophy size={18} /></div>
           <div className="drc-info">
             <span className="drc-label">Your Rank</span>
-            <span className="drc-rank">#8</span>
+            <span className="drc-rank">#{myRank || '—'}</span>
           </div>
         </div>
         <div className="drc-right">
-          <span className="drc-gap">35 more sales to reach #1</span>
+          <span className="drc-gap">{salesToFirst > 0 ? `${salesToFirst} more sale${salesToFirst === 1 ? '' : 's'} to reach #1` : totalPurchases > 0 ? "You're leading!" : 'Make your first sale!'}</span>
           <span className="drc-link">View Leaderboard →</span>
         </div>
       </div>
