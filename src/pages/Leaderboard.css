@@ -1,0 +1,350 @@
+.leaderboard-page {
+  max-width: 900px;
+}
+
+/* Rank Card */
+.rank-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.rank-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent-orange));
+}
+
+.rank-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rank-position {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.rank-hash {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.rank-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.rank-info h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.rank-info p {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.rank-card-right {
+  display: flex;
+  align-items: center;
+}
+
+.rank-to-first {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--primary-bg);
+  border: 1px solid rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+/* Podium */
+.podium {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding: 20px 0 0;
+}
+
+.podium-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  width: 160px;
+  position: relative;
+}
+
+.podium-item.first {
+  padding-top: 28px;
+  padding-bottom: 20px;
+  transform: translateY(-8px);
+}
+
+.podium-item.first .podium-avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 0.85rem;
+}
+
+.podium-crown {
+  position: absolute;
+  top: -14px;
+  color: #eab308;
+  filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.4));
+}
+
+.podium-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.podium-avatar.gold {
+  background: linear-gradient(135deg, var(--primary), var(--accent-orange));
+  border-color: var(--primary);
+  color: white;
+}
+
+.podium-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.podium-sales {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+.podium-medal {
+  color: var(--text-dim);
+}
+
+.podium-medal.gold {
+  color: #eab308;
+}
+
+.podium-rank {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* List */
+.leaderboard-list {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.lb-header {
+  display: grid;
+  grid-template-columns: 70px 1fr 100px 120px;
+  padding: 12px 20px;
+  background: var(--bg-elevated);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 100px 120px;
+  padding: 13px 20px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.lb-row:last-child {
+  border-bottom: none;
+}
+
+.lb-row:hover {
+  background: var(--bg-secondary);
+}
+
+.lb-row.is-me {
+  background: var(--primary-bg);
+  border-color: rgba(239, 68, 68, 0.08);
+}
+
+.lb-rank {
+  display: flex;
+  align-items: center;
+}
+
+.rank-icon {
+  font-size: 1.1rem;
+}
+
+.rank-num {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  padding-left: 4px;
+}
+
+.lb-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.lb-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.lb-row.is-me .lb-avatar {
+  background: linear-gradient(135deg, var(--primary), var(--accent-orange));
+  color: white;
+  border-color: var(--primary);
+}
+
+.you-badge {
+  font-size: 0.62rem;
+  padding: 2px 6px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 4px;
+  font-weight: 600;
+  border: 1px solid rgba(239, 68, 68, 0.12);
+}
+
+.lb-sales {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.lb-earned {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--success);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@media (max-width: 700px) {
+  .podium {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .podium-item {
+    width: 100%;
+    flex-direction: row;
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  .podium-item.first {
+    transform: none;
+    padding: 14px 16px;
+  }
+  .podium-item.first .podium-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 0.72rem;
+  }
+  .podium-crown {
+    position: static;
+    order: -1;
+  }
+  .podium-medal {
+    margin-left: auto;
+  }
+  .podium-rank {
+    display: none;
+  }
+  .lb-header,
+  .lb-row {
+    grid-template-columns: 44px 1fr 60px 80px;
+    padding: 10px 12px;
+    font-size: 0.72rem;
+  }
+  .lb-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.55rem;
+  }
+  .lb-name {
+    font-size: 0.75rem;
+    gap: 6px;
+  }
+  .rank-card {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .rank-card-right {
+    width: 100%;
+  }
+  .rank-to-first {
+    width: 100%;
+    justify-content: center;
+  }
+}
