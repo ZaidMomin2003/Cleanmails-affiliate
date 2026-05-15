@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy, ChevronDown } from 'lucide-react'
+import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy, ChevronDown, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useAuth } from '../context/AuthContext'
-import { getReferralLinks, getPurchases, createReferralLink } from '../lib/database'
+import { getReferralLinks, getPurchases, createReferralLink, deleteReferralLink } from '../lib/database'
 import './Dashboard.css'
 
 function MiniSparkline({ data, color }) {
@@ -135,6 +135,16 @@ function Dashboard() {
     navigator.clipboard.writeText(url)
     setCopiedId(id)
     setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  const handleDeleteLink = async (linkId) => {
+    if (!confirm('Delete this referral link? This cannot be undone.')) return
+    try {
+      await deleteReferralLink(linkId)
+      setLinks(links.filter(l => l.id !== linkId))
+    } catch (e) {
+      console.warn('Failed to delete link:', e.message)
+    }
   }
 
   // Compute stats from real data — filtered by time
@@ -369,6 +379,9 @@ function Dashboard() {
                     >
                       {copiedId === link.id ? <Check size={13} /> : <Copy size={13} />}
                       {copiedId === link.id ? 'Copied' : 'Copy'}
+                    </button>
+                    <button className="delete-btn" onClick={() => handleDeleteLink(link.id)}>
+                      <Trash2 size={13} />
                     </button>
                   </span>
                 </div>

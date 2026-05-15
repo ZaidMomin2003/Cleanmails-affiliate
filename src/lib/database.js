@@ -6,6 +6,7 @@ import {
   getDocs,
   updateDoc,
   addDoc,
+  deleteDoc,
   query,
   where,
   limit,
@@ -65,6 +66,10 @@ export async function getReferralLinks(uid) {
     console.warn('getReferralLinks error:', e.code, e.message)
     return []
   }
+}
+
+export async function deleteReferralLink(docId) {
+  await deleteDoc(doc(db, 'referralLinks', docId))
 }
 
 // ---- Purchases ----
