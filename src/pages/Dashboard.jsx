@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy } from 'lucide-react'
+import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy, ChevronDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../lib/firebase'
@@ -70,6 +70,8 @@ function Dashboard() {
   const [showLinkModal, setShowLinkModal] = useState(false)
   const [customCode, setCustomCode] = useState('')
   const [linkExpiry, setLinkExpiry] = useState('')
+  const [timeFilter, setTimeFilter] = useState('all')
+  const [showTimeDropdown, setShowTimeDropdown] = useState(false)
 
   useEffect(() => {
     if (user) loadData()
@@ -77,15 +79,25 @@ function Dashboard() {
 
   async function loadData() {
     setLoading(true)
-    try {
-      const [linksData, purchasesData] = await Promise.all([
-        getReferralLinks(user.uid),
-        getPurchases(user.uid),
-      ])
-      setLinks(linksData)
-      setPurchases(purchasesData)
 
-      // Load rank
+    // Load links independently
+    try {
+      const linksData = await getReferralLinks(user.uid)
+      setLinks(linksData)
+    } catch (e) {
+      console.warn('Failed to load links:', e.message)
+    }
+
+    // Load purchases independently
+    try {
+      const purchasesData = await getPurchases(user.uid)
+      setPurchases(purchasesData)
+    } catch (e) {
+      console.warn('Failed to load purchases:', e.message)
+    }
+
+    // Load rank
+    try {
       const lbQuery = query(collection(db, 'affiliates'), orderBy('totalEarned', 'desc'), limit(50))
       const lbSnap = await getDocs(lbQuery)
       const ranked = lbSnap.docs.map(d => d.id)
@@ -97,8 +109,9 @@ function Dashboard() {
         setSalesToFirst(Math.max(0, Math.floor((topEarned - myEarned) / 100)))
       }
     } catch (e) {
-      console.warn('Failed to load data:', e.message)
+      console.warn('Failed to load rank:', e.message)
     }
+
     setLoading(false)
   }
 
@@ -124,20 +137,29 @@ function Dashboard() {
     setTimeout(() => setCopiedId(null), 2000)
   }
 
-  // Compute stats from real data
-  const totalEarned = profile?.totalEarned || 0
+  // Compute stats from real data — filtered by time
+  const filteredPurchases = filterByTime(purchases, timeFilter)
+  const totalEarned = timeFilter === 'all' ? (profile?.totalEarned || 0) : filteredPurchases.reduce((sum, p) => sum + (p.commission || 0), 0)
   const totalPaid = profile?.totalPaid || 0
   const balance = profile?.balance || 0
-  const totalPurchases = purchases.length
+  const totalPurchases = filteredPurchases.length
   const totalClicks = links.reduce((sum, l) => sum + (l.clicks || 0), 0)
   const conversionRate = totalClicks > 0 ? ((totalPurchases / totalClicks) * 100).toFixed(1) : '0.0'
 
-  // Build chart data from purchases
-  const chartData = buildChartData(purchases)
+  // Build chart data from filtered purchases
+  const chartData = buildChartData(filteredPurchases)
 
-  // Sparkline data from purchases (last 12 data points)
+  // Sparkline data
   const earningsSparkline = chartData.slice(-12).map(d => d.earnings)
   const purchaseSparkline = chartData.slice(-12).map(d => d.count || 0)
+
+  const timeFilterLabels = {
+    all: 'All time',
+    week: 'Last week',
+    month: 'Last month',
+    '3months': 'Last 3 months',
+    '6months': 'Last 6 months',
+  }
 
   return (
     <div className="dashboard">
@@ -155,7 +177,25 @@ function Dashboard() {
       <div className="overview-header">
         <h2>Overview</h2>
         <div className="overview-actions">
-          <span className="time-badge"><Calendar size={12} /> All time</span>
+          <div className="time-dropdown-wrap">
+            <button className="time-badge" onClick={() => setShowTimeDropdown(!showTimeDropdown)}>
+              <Calendar size={12} /> {timeFilterLabels[timeFilter]}
+              <ChevronDown size={12} />
+            </button>
+            {showTimeDropdown && (
+              <div className="time-dropdown">
+                {Object.entries(timeFilterLabels).map(([key, label]) => (
+                  <button
+                    key={key}
+                    className={`time-dropdown-item ${timeFilter === key ? 'active' : ''}`}
+                    onClick={() => { setTimeFilter(key); setShowTimeDropdown(false) }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -428,6 +468,23 @@ function formatDate(timestamp) {
   if (!timestamp) return '—'
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+function filterByTime(purchases, filter) {
+  if (filter === 'all') return purchases
+  const now = new Date()
+  let cutoff
+  switch (filter) {
+    case 'week': cutoff = new Date(now - 7 * 24 * 60 * 60 * 1000); break
+    case 'month': cutoff = new Date(now - 30 * 24 * 60 * 60 * 1000); break
+    case '3months': cutoff = new Date(now - 90 * 24 * 60 * 60 * 1000); break
+    case '6months': cutoff = new Date(now - 180 * 24 * 60 * 60 * 1000); break
+    default: return purchases
+  }
+  return purchases.filter((p) => {
+    const date = p.timestamp?.toDate ? p.timestamp.toDate() : new Date(p.timestamp)
+    return date >= cutoff
+  })
 }
 
 function buildChartData(purchases) {

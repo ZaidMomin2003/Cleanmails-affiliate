@@ -8,7 +8,6 @@ import {
   addDoc,
   query,
   where,
-  orderBy,
   limit,
   serverTimestamp,
 } from 'firebase/firestore'
@@ -71,13 +70,23 @@ export async function getReferralLinks(uid) {
 // ---- Purchases ----
 
 export async function getPurchases(uid) {
-  const q = query(
-    collection(db, 'purchases'),
-    where('affiliateId', '==', uid),
-    orderBy('timestamp', 'desc')
-  )
-  const snapshot = await getDocs(q)
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  try {
+    const q = query(
+      collection(db, 'purchases'),
+      where('affiliateId', '==', uid)
+    )
+    const snapshot = await getDocs(q)
+    const purchases = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    purchases.sort((a, b) => {
+      const aTime = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0
+      const bTime = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0
+      return bTime - aTime
+    })
+    return purchases
+  } catch (e) {
+    console.warn('getPurchases error:', e.code, e.message)
+    return []
+  }
 }
 
 // ---- Payouts ----
@@ -97,13 +106,23 @@ export async function requestPayout(uid, amount, wiseEmail, wiseName) {
 }
 
 export async function getPayouts(uid) {
-  const q = query(
-    collection(db, 'payouts'),
-    where('affiliateId', '==', uid),
-    orderBy('createdAt', 'desc')
-  )
-  const snapshot = await getDocs(q)
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  try {
+    const q = query(
+      collection(db, 'payouts'),
+      where('affiliateId', '==', uid)
+    )
+    const snapshot = await getDocs(q)
+    const payouts = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    payouts.sort((a, b) => {
+      const aTime = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0
+      const bTime = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0
+      return bTime - aTime
+    })
+    return payouts
+  } catch (e) {
+    console.warn('getPayouts error:', e.code, e.message)
+    return []
+  }
 }
 
 // ---- Assets ----

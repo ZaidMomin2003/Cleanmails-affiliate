@@ -68,6 +68,53 @@
   border-radius: 8px;
   color: var(--text-muted);
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.time-badge:hover {
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.time-dropdown-wrap {
+  position: relative;
+}
+
+.time-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  box-shadow: var(--shadow-lg);
+  z-index: 50;
+  min-width: 160px;
+}
+
+.time-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 450;
+  color: var(--text-secondary);
+  background: none;
+  border-radius: 6px;
+  text-align: left;
+  transition: all 0.1s;
+}
+
+.time-dropdown-item:hover {
+  background: var(--bg-elevated);
+}
+
+.time-dropdown-item.active {
+  color: var(--primary);
+  font-weight: 600;
+  background: var(--primary-bg);
 }
 
 .icon-btn {
