@@ -49,19 +49,23 @@ export async function createReferralLink(uid, customCode = '', expiresAt = null)
 }
 
 export async function getReferralLinks(uid) {
-  const q = query(
-    collection(db, 'referralLinks'),
-    where('affiliateId', '==', uid)
-  )
-  const snapshot = await getDocs(q)
-  const links = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-  // Sort client-side since orderBy + where on different fields needs composite index
-  links.sort((a, b) => {
-    const aTime = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0
-    const bTime = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0
-    return bTime - aTime
-  })
-  return links
+  try {
+    const q = query(
+      collection(db, 'referralLinks'),
+      where('affiliateId', '==', uid)
+    )
+    const snapshot = await getDocs(q)
+    const links = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    links.sort((a, b) => {
+      const aTime = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0
+      const bTime = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0
+      return bTime - aTime
+    })
+    return links
+  } catch (e) {
+    console.warn('getReferralLinks error:', e.code, e.message)
+    return []
+  }
 }
 
 // ---- Purchases ----
