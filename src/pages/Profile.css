@@ -1,5 +1,6 @@
 .profile-page {
   max-width: 900px;
+  overflow-x: hidden;
 }
 
 /* Profile Hero */
@@ -409,6 +410,7 @@
   .profile-tabs {
     overflow-x: auto;
     flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
   }
   .profile-tab {
     white-space: nowrap;
@@ -416,5 +418,16 @@
   }
   .profile-form-card {
     padding: 20px;
+  }
+  .profile-page {
+    overflow-x: hidden;
+  }
+  .field-input-wrap {
+    min-width: 0;
+  }
+  .field-input-wrap input,
+  .field-input-wrap select {
+    min-width: 0;
+    width: 100%;
   }
 }

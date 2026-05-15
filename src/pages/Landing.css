@@ -411,6 +411,18 @@
   color: white;
 }
 
+@media (max-width: 600px) {
+  .discord-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .discord-link {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* ---- Bottom CTA ---- */
 .bottom-cta {
   padding: 80px 28px;

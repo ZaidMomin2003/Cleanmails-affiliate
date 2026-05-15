@@ -626,6 +626,170 @@
   color: var(--text-dim);
 }
 
+.expired-row {
+  opacity: 0.5;
+}
+
+.expired-tag {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.6rem;
+  padding: 2px 5px;
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--primary);
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Link Modal */
+.link-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.link-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.link-modal h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.link-modal-sub {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.link-modal-field {
+  margin-bottom: 18px;
+}
+
+.link-modal-field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.link-modal-input-row {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-input);
+}
+
+.link-prefix {
+  padding: 10px 0 10px 12px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.link-modal-input-row input {
+  flex: 1;
+  padding: 10px 12px 10px 2px;
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.link-modal-input-row input::placeholder {
+  color: var(--text-dim);
+}
+
+.link-modal-field input[type="date"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-input);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.link-modal-field input[type="date"]:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+.link-modal-hint {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.link-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.link-modal-cancel {
+  padding: 9px 16px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.link-modal-cancel:hover {
+  background: var(--border);
+}
+
+.link-modal-create {
+  padding: 9px 18px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.link-modal-create:hover {
+  opacity: 0.9;
+}
+
+.link-modal-create:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 1100px) {
   .chart-section {
     grid-template-columns: 1fr;

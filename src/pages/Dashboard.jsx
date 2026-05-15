@@ -67,6 +67,9 @@ function Dashboard() {
   const [generating, setGenerating] = useState(false)
   const [myRank, setMyRank] = useState(null)
   const [salesToFirst, setSalesToFirst] = useState(0)
+  const [showLinkModal, setShowLinkModal] = useState(false)
+  const [customCode, setCustomCode] = useState('')
+  const [linkExpiry, setLinkExpiry] = useState('')
 
   useEffect(() => {
     if (user) loadData()
@@ -103,8 +106,12 @@ function Dashboard() {
     if (generating) return
     setGenerating(true)
     try {
-      const newLink = await createReferralLink(user.uid)
+      const expiresAt = linkExpiry ? new Date(linkExpiry).toISOString() : null
+      const newLink = await createReferralLink(user.uid, customCode.trim(), expiresAt)
       setLinks([newLink, ...links])
+      setShowLinkModal(false)
+      setCustomCode('')
+      setLinkExpiry('')
     } catch (e) {
       console.warn('Failed to create link:', e.message)
     }
@@ -283,9 +290,9 @@ function Dashboard() {
             <h2>Referral Links</h2>
             <p className="section-subtitle">Your active referral links</p>
           </div>
-          <button className="btn-primary-sm" onClick={handleGenerateLink} disabled={generating}>
+          <button className="btn-primary-sm" onClick={() => setShowLinkModal(true)}>
             <Plus size={14} />
-            {generating ? 'Creating...' : 'Generate Link'}
+            Generate Link
           </button>
         </div>
         {loading ? (
@@ -298,32 +305,81 @@ function Dashboard() {
               <span>Link</span>
               <span>Clicks</span>
               <span>Conversions</span>
-              <span>Created</span>
+              <span>Expires</span>
               <span>Action</span>
             </div>
-            {links.map((link) => (
-              <div key={link.id} className="table-row">
-                <span className="link-url">
-                  <Link2 size={13} />
-                  {link.url?.replace('https://', '') || link.code}
-                </span>
-                <span className="mono-value">{link.clicks || 0}</span>
-                <span className="mono-value">{link.conversions || 0}</span>
-                <span className="date-value">{formatDate(link.createdAt)}</span>
-                <span className="link-actions">
-                  <button
-                    className={`copy-btn ${copiedId === link.id ? 'copied' : ''}`}
-                    onClick={() => handleCopy(link.url, link.id)}
-                  >
-                    {copiedId === link.id ? <Check size={13} /> : <Copy size={13} />}
-                    {copiedId === link.id ? 'Copied' : 'Copy'}
-                  </button>
-                </span>
-              </div>
-            ))}
+            {links.map((link) => {
+              const isExpired = link.expiresAt && new Date(link.expiresAt) < new Date()
+              return (
+                <div key={link.id} className={`table-row ${isExpired ? 'expired-row' : ''}`}>
+                  <span className="link-url">
+                    <Link2 size={13} />
+                    {link.url?.replace('https://', '') || link.code}
+                  </span>
+                  <span className="mono-value">{link.clicks || 0}</span>
+                  <span className="mono-value">{link.conversions || 0}</span>
+                  <span className="date-value">
+                    {link.expiresAt ? formatDate({ toDate: () => new Date(link.expiresAt) }) : 'Never'}
+                    {isExpired && <span className="expired-tag">Expired</span>}
+                  </span>
+                  <span className="link-actions">
+                    <button
+                      className={`copy-btn ${copiedId === link.id ? 'copied' : ''}`}
+                      onClick={() => handleCopy(link.url, link.id)}
+                    >
+                      {copiedId === link.id ? <Check size={13} /> : <Copy size={13} />}
+                      {copiedId === link.id ? 'Copied' : 'Copy'}
+                    </button>
+                  </span>
+                </div>
+              )
+            })}
           </div>
         )}
       </div>
+
+      {/* Generate Link Modal */}
+      {showLinkModal && (
+        <div className="link-modal-overlay" onClick={() => setShowLinkModal(false)}>
+          <div className="link-modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Generate Referral Link</h3>
+            <p className="link-modal-sub">Create a custom or auto-generated referral link</p>
+
+            <div className="link-modal-field">
+              <label>Custom Code (optional)</label>
+              <div className="link-modal-input-row">
+                <span className="link-prefix">cleanmails.online/?ref=</span>
+                <input
+                  type="text"
+                  placeholder="my-custom-code"
+                  value={customCode}
+                  onChange={(e) => setCustomCode(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))}
+                  maxLength={30}
+                />
+              </div>
+              <span className="link-modal-hint">Leave empty for auto-generated. Letters, numbers, dashes only.</span>
+            </div>
+
+            <div className="link-modal-field">
+              <label>Expiry Date (optional)</label>
+              <input
+                type="date"
+                value={linkExpiry}
+                onChange={(e) => setLinkExpiry(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+              />
+              <span className="link-modal-hint">Leave empty for no expiration.</span>
+            </div>
+
+            <div className="link-modal-actions">
+              <button className="link-modal-cancel" onClick={() => setShowLinkModal(false)}>Cancel</button>
+              <button className="link-modal-create" onClick={handleGenerateLink} disabled={generating}>
+                {generating ? 'Creating...' : 'Create Link'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Recent Purchases */}
       <div className="section-card">
