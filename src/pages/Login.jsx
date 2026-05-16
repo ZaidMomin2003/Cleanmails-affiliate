@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Zap, Eye, EyeOff } from 'lucide-react'
-import { signUp, signIn, signInWithGoogle } from '../lib/auth'
+import { signUp, signIn, signInWithGoogle, resetPassword } from '../lib/auth'
 import './Login.css'
 
 function Login() {
@@ -10,6 +10,8 @@ function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [showForgot, setShowForgot] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -62,6 +64,68 @@ function Login() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault()
+    if (!formData.email) {
+      setError('Enter your email address first')
+      return
+    }
+    setError('')
+    setLoading(true)
+    try {
+      await resetPassword(formData.email)
+      setResetSent(true)
+    } catch (err) {
+      setError('Could not send reset email. Check the address and try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Forgot password view
+  if (showForgot) {
+    return (
+      <div className="login-page">
+        <div className="login-card">
+          <div className="login-logo" onClick={() => navigate('/')}>
+            <Zap size={18} />
+            <span>CleanMails</span>
+          </div>
+
+          <h1>Reset password</h1>
+          <p className="login-sub">We'll send a reset link to your email</p>
+
+          {error && <div className="login-error">{error}</div>}
+          {resetSent && <div className="login-success">Reset link sent! Check your inbox.</div>}
+
+          <form onSubmit={handleForgotPassword} className="login-form">
+            <div className="form-field">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <button type="submit" className="login-btn" disabled={loading}>
+              {loading ? 'Sending...' : 'Send Reset Link'}
+            </button>
+          </form>
+
+          <p className="login-switch">
+            Remember your password?
+            <button type="button" onClick={() => { setShowForgot(false); setError(''); setResetSent(false) }}>
+              Sign in
+            </button>
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -137,6 +201,12 @@ function Login() {
               />
               <span>I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a></span>
             </label>
+          )}
+
+          {!isSignup && (
+            <button type="button" className="forgot-btn" onClick={() => setShowForgot(true)}>
+              Forgot password?
+            </button>
           )}
 
           <button type="submit" className="login-btn" disabled={loading || (isSignup && !acceptedTerms)}>

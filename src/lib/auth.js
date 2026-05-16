@@ -4,6 +4,7 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from 'firebase/auth'
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db, googleProvider } from './firebase'
@@ -93,6 +94,11 @@ export async function signInWithGoogle() {
 // Sign out
 export async function logOut() {
   await signOut(auth)
+}
+
+// Reset password
+export async function resetPassword(email) {
+  await sendPasswordResetEmail(auth, email)
 }
 
 // Auth state listener

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy, ChevronDown, Trash2 } from 'lucide-react'
+import { DollarSign, TrendingUp, ShoppingCart, Link2, Copy, Check, Plus, ExternalLink, Calendar, Maximize2, MoreVertical, Trophy, ChevronDown, Trash2, X, Info, Mail } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../lib/firebase'
@@ -72,6 +72,9 @@ function Dashboard() {
   const [linkExpiry, setLinkExpiry] = useState('')
   const [timeFilter, setTimeFilter] = useState('all')
   const [showTimeDropdown, setShowTimeDropdown] = useState(false)
+  const [showNotice, setShowNotice] = useState(() => {
+    return !sessionStorage.getItem('notice_dismissed')
+  })
 
   useEffect(() => {
     if (user) loadData()
@@ -173,6 +176,55 @@ function Dashboard() {
 
   return (
     <div className="dashboard">
+      {/* Notice Popup */}
+      {showNotice && (
+        <div className="notice-overlay" onClick={() => { setShowNotice(false); sessionStorage.setItem('notice_dismissed', '1') }}>
+          <div className="notice-modal" onClick={e => e.stopPropagation()}>
+            <button className="notice-close" onClick={() => { setShowNotice(false); sessionStorage.setItem('notice_dismissed', '1') }}>
+              <X size={18} />
+            </button>
+            <div className="notice-icon">
+              <Info size={24} />
+            </div>
+            <h2 className="notice-title">Important Notice</h2>
+
+            <div className="notice-section">
+              <h4>📅 Sales Start May 21st</h4>
+              <p>All affiliate sales will officially begin from <strong>21st May</strong>. Until then, feel free to create buzz around the product — share teasers, build anticipation, and get your audience ready.</p>
+            </div>
+
+            <div className="notice-section">
+              <h4>🎁 Free Software Copy</h4>
+              <p>Every affiliate gets a <strong>free copy of CleanMails</strong> upon request — so you can experience the product firsthand and create authentic content.</p>
+              <a href="mailto:hello@cleanmails.online" className="notice-email">
+                <Mail size={14} />
+                hello@cleanmails.online
+              </a>
+              <span className="notice-email-hint">Email us to request your free copy</span>
+            </div>
+
+            <div className="notice-section">
+              <h4>💸 Payout Schedule</h4>
+              <div className="notice-payout-grid">
+                <div className="notice-payout-block">
+                  <span className="npb-period">Sales from 1st – 15th</span>
+                  <span className="npb-date">Paid by the 25th</span>
+                </div>
+                <div className="notice-payout-block">
+                  <span className="npb-period">Sales from 15th – 30th</span>
+                  <span className="npb-date">Paid by next month 10th</span>
+                </div>
+              </div>
+              <p className="notice-payout-note">$100 flat per sale • No limits • Via Wise</p>
+            </div>
+
+            <button className="notice-got-it" onClick={() => { setShowNotice(false); sessionStorage.setItem('notice_dismissed', '1') }}>
+              Got it, let's go
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="page-header">
         <div className="page-title-section">
           <div className="page-title-row">
