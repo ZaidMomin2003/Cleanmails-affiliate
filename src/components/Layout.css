@@ -57,28 +57,27 @@
   letter-spacing: 0;
 }
 
-.sidebar-search {
+.sidebar-quick-link {
   margin: 4px 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+}
+
+.sidebar-quick-link a {
+  display: block;
   padding: 9px 12px;
-  background: var(--bg-card);
+  background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: var(--text-dim);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: center;
+  transition: all 0.15s;
 }
 
-.sidebar-search input {
-  background: none;
-  border: none;
-  color: var(--text-primary);
-  font-size: 0.82rem;
-  width: 100%;
-}
-
-.sidebar-search input::placeholder {
-  color: var(--text-dim);
+.sidebar-quick-link a:hover {
+  background: var(--primary-bg);
+  color: var(--primary);
+  border-color: rgba(220, 38, 38, 0.12);
 }
 
 .nav-section {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Search, Trophy, Menu, X } from 'lucide-react'
+import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Trophy, Menu, X } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { logOut } from '../lib/auth'
 import './Layout.css'
@@ -51,9 +51,10 @@ function Layout() {
           </div>
         </div>
 
-        <div className="sidebar-search">
-          <Search size={15} />
-          <input type="text" placeholder="Search" />
+        <div className="sidebar-quick-link">
+          <a href="https://cleanmails.online" target="_blank" rel="noopener noreferrer">
+            Visit CleanMails ↗
+          </a>
         </div>
 
         <div className="nav-section">
