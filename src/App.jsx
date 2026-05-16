@@ -10,8 +10,10 @@ import Leaderboard from './pages/Leaderboard'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
+import Admin from './pages/Admin'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminRoute from './components/AdminRoute'
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <Route path="/onboarding" element={<Onboarding />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
       <Route path="/app" element={
         <ProtectedRoute>
           <Layout />
