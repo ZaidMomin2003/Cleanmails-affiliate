@@ -457,6 +457,130 @@ Not affiliated with the company (edit: I am an affiliate, disclosure). Just genu
   },
 ]
 
+const prompts = [
+  {
+    id: 'p1',
+    type: 'X / Twitter Post',
+    title: 'Generate a viral tweet about cold email infrastructure',
+    preview: 'Produces a casual, human-sounding tweet sharing your cold email setup with a soft mention of CleanMails.',
+    full: `Write me a tweet (under 280 characters or a short thread of 3-4 tweets) about cold email infrastructure in 2025.
+
+PRODUCT CONTEXT:
+CleanMails is a self-hosted cold email tool. One-time payment of $497. Includes SMTP rotation, email validation, warmup, automated cadences, and AI auto-reply. Runs on a Linux VPS. No monthly fees, no limits on contacts or sending.
+
+WRITING RULES:
+- Do NOT use bullet points with dashes or hyphens
+- Do NOT use bold formatting or markdown
+- Write like a real person typing casually, not a marketer
+- Include 1-2 minor spelling quirks or informal grammar (like "dont" instead of "don't" or starting sentence with "ngl")
+- No bold claims like "best tool ever" or "game changer"
+- The post should be 99% genuinely helpful information about cold email setup/costs/infrastructure
+- Mention CleanMails only once, casually, as one option among others (mention Instantly, Smartlead, or accellemails too as context)
+- The CTA should be soft and buried in the middle, not at the end — something like "been using cleanmails for this" in passing
+- Sound like someone sharing their personal experience, not selling
+- No emojis except maybe one at most
+- No hashtags`,
+  },
+  {
+    id: 'p2',
+    type: 'Reddit Post',
+    title: 'Generate a Reddit post about switching email tools',
+    preview: 'Creates an authentic Reddit-style post sharing a tool switch experience for r/coldoutreach or r/SaaS.',
+    full: `Write me a Reddit post for r/coldoutreach or r/Entrepreneur about my experience switching cold email tools.
+
+PRODUCT CONTEXT:
+CleanMails is a self-hosted cold email platform. $497 one-time, runs on your own VPS ($5/mo on Hetzner). Features: SMTP rotation across unlimited domains, built-in email validation, auto warmup, multi-step cadences, AI auto-reply. Free installation included. No contact limits, no monthly fees.
+
+WRITING RULES:
+- Do NOT use dashes (-) for lists. Use numbers or just write in paragraphs
+- Do NOT use markdown bold or headers excessively
+- Write like a real Reddit user, slightly informal, conversational
+- Include occasional typos or casual grammar ("tbh", "ngl", "kinda", "idk")
+- No exaggerated claims. Be balanced, mention at least one downside
+- The post should be 99% useful information about cold email infrastructure, costs, deliverability, setup
+- Mention CleanMails naturally in the middle as "what i ended up going with" alongside mentions of Instantly, Smartlead, or Apollo as things you tried before
+- Do NOT make it sound like an ad. Sound like someone genuinely sharing their journey
+- Include some specific numbers (reply rates, inbox placement, daily sends) to make it feel real
+- Keep the affiliate link mention casual at the end like "happy to share link if anyone wants"
+- Add a "disclaimer: this has my referral link" at the very end`,
+  },
+  {
+    id: 'p3',
+    type: 'Medium / Blog Post',
+    title: 'Generate a comparison blog post',
+    preview: 'Produces a detailed, SEO-friendly blog post comparing cold email tools with CleanMails mentioned naturally.',
+    full: `Write me a 1000-1200 word blog post comparing cold email tools available in 2025 for agencies and founders doing outbound.
+
+PRODUCT CONTEXT:
+CleanMails is a self-hosted cold email tool. One-time $497. Self-hosted on Linux VPS. Includes: SMTP rotation, email validation, sender warmup, automated multi-step cadences, AI auto-reply that reads and responds to prospect replies. Free white-glove installation. No limits. Runs entirely on your server (privacy focused).
+
+TOOLS TO COMPARE:
+Include at least 4 tools: Instantly ($97-297/mo), Smartlead ($94-174/mo), Apollo.io (freemium + paid), accellemails, and CleanMails. Give honest pros and cons for each.
+
+WRITING RULES:
+- Do NOT use dash/hyphen bullet points anywhere. Use numbered lists or flowing paragraphs
+- Do NOT overuse bold text. Max 3-4 bold words in the entire post
+- Write in first person like a practitioner sharing experience, not a content marketer writing SEO copy
+- Include small imperfections: occasional informal phrases, maybe one "tbh" or "honestly"
+- No superlatives like "best", "amazing", "incredible", "game-changing"
+- 99% of the post should be genuinely useful comparison info that helps the reader decide
+- CleanMails should be positioned as one option among many, not the clear winner. Let the reader decide based on facts
+- Mention it naturally around the 60% mark of the post, not at the beginning or end
+- Include real-looking numbers: monthly costs, payback periods, deliverability rates
+- End with a balanced conclusion like "depends on your situation" not "you should definitely use X"
+- Add your referral link only once, inline, naturally`,
+  },
+  {
+    id: 'p4',
+    type: 'X / Twitter Thread',
+    title: 'Generate a value thread about cold email deliverability',
+    preview: 'Creates a 5-7 tweet thread about email deliverability tips with CleanMails mentioned once as a tool.',
+    full: `Write me a Twitter/X thread (5-7 tweets) about cold email deliverability in 2025. What actually works, what doesnt, and how to get emails into inbox.
+
+PRODUCT CONTEXT (mention only once, casually):
+CleanMails is a self-hosted cold email tool with built-in validation and warmup. One-time payment, self-hosted. I use it for my own outreach.
+
+WRITING RULES:
+- Do NOT use dashes for lists. Write in flowing sentences or use "1." "2." numbered format
+- Write like a real person sharing what they learned, not a thread bro optimizing for engagement
+- No "🧵 Thread:" or "THREAD:" opener. Just start with the content
+- Include typos or casual grammar in 1-2 tweets (like "dont" or "ive")
+- No bold claims. Share specific things you learned/tested
+- 99% deliverability knowledge: DNS setup, warmup strategy, volume management, content tips, domain reputation
+- Mention CleanMails only in tweet 4 or 5, casually, like "i use cleanmails for this but theres other tools too"
+- Also mention other tools naturally: "whether you use instantly, smartlead, or whatever"
+- No emojis except maybe one in the whole thread
+- No "follow me for more" or engagement bait at the end
+- Last tweet should be a genuine tip, not a CTA`,
+  },
+  {
+    id: 'p5',
+    type: 'Reddit Comment',
+    title: 'Generate helpful Reddit comments that mention the tool',
+    preview: 'Produces 3 short Reddit comment replies to common cold email questions with subtle tool mentions.',
+    full: `Write me 3 short Reddit comments (each 3-5 sentences) that I can post as replies to common questions in cold email subreddits.
+
+PRODUCT CONTEXT (mention very subtly):
+CleanMails is a self-hosted cold email tool. $497 one-time. SMTP rotation, validation, warmup, cadences. Self-hosted.
+
+COMMON QUESTIONS TO REPLY TO:
+1. "What's the best cold email tool for agencies?" (in r/coldoutreach)
+2. "How do I improve my cold email deliverability?" (in r/Emailmarketing)
+3. "Is Instantly worth it at $200/mo?" (in r/SaaS)
+
+WRITING RULES:
+- Short, helpful, sounds like a quick genuine reply
+- Do NOT use any formatting. Plain text only, like how real redditors type
+- Casual tone, maybe one "tbh" or "imo"
+- Answer the actual question first with real advice
+- Mention CleanMails as one option among 2-3 others, not as THE answer
+- Say something like "ive been using cleanmails lately and its decent for the price" not "you should use CleanMails"
+- Include one slightly negative thing about it to sound authentic ("ui could be better but it works")
+- No links in the comment. If asked, say "can dm you the link"
+- Sound like you're being helpful, not promotional`,
+  },
+]
+
 function Assets() {
   const [assets, setAssets] = useState([])
   const [loading, setLoading] = useState(true)
@@ -534,6 +658,9 @@ function Assets() {
         </button>
         <button className={`ast-tab ${activeSection === 'reddit' ? 'active' : ''}`} onClick={() => setActiveSection('reddit')}>
           <MessageCircle size={15} /> Reddit
+        </button>
+        <button className={`ast-tab ${activeSection === 'prompts' ? 'active' : ''}`} onClick={() => setActiveSection('prompts')}>
+          <PenLine size={15} /> Prompts
         </button>
       </div>
 
@@ -669,6 +796,27 @@ function Assets() {
                 <h4>{item.title}</h4>
                 <p>{item.preview}</p>
                 <button className="read-more-btn" onClick={() => setExpandedItem(item)}>Read full post →</button>
+              </div>
+              <button className={`copy-content-btn ${copiedId === item.id ? 'copied' : ''}`} onClick={() => handleCopy(item.full, item.id)}>
+                {copiedId === item.id ? <Check size={14} /> : <Copy size={14} />}
+                {copiedId === item.id ? 'Copied' : 'Copy'}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Prompts */}
+      {activeSection === 'prompts' && (
+        <div className="content-list">
+          <p className="content-list-desc">AI prompts to generate posts. Paste into ChatGPT/Claude. Each prompt includes product context and writing rules for human-sounding output.</p>
+          {prompts.map((item) => (
+            <div key={item.id} className="content-card">
+              <div className="content-card-body">
+                <span className="prompt-type">{item.type}</span>
+                <h4>{item.title}</h4>
+                <p>{item.preview}</p>
+                <button className="read-more-btn" onClick={() => setExpandedItem(item)}>View full prompt →</button>
               </div>
               <button className={`copy-content-btn ${copiedId === item.id ? 'copied' : ''}`} onClick={() => handleCopy(item.full, item.id)}>
                 {copiedId === item.id ? <Check size={14} /> : <Copy size={14} />}
