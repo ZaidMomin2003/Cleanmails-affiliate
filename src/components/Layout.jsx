@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Trophy, Menu, X, Users } from 'lucide-react'
+import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Trophy, Menu, X, Users, Moon, Sun } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { logOut } from '../lib/auth'
 import './Layout.css'
@@ -9,6 +9,12 @@ function Layout() {
   const navigate = useNavigate()
   const { user, profile } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [dark])
 
   const handleLogout = async () => {
     await logOut()
@@ -94,6 +100,15 @@ function Layout() {
         </div>
 
         <div className="sidebar-footer">
+          <div className="sidebar-actions-row">
+            <button className="theme-toggle" onClick={() => setDark(!dark)} title={dark ? 'Light mode' : 'Dark mode'}>
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+            <button className="logout-btn-red" onClick={handleLogout} title="Logout">
+              <LogOut size={15} />
+              <span>Logout</span>
+            </button>
+          </div>
           <div className="user-info">
             <div className="user-avatar">{initials}</div>
             <div className="user-details">
@@ -101,9 +116,6 @@ function Layout() {
               <span className="user-email">{user?.email || ''}</span>
             </div>
           </div>
-          <button className="logout-btn" onClick={handleLogout} title="Logout">
-            <LogOut size={16} />
-          </button>
         </div>
       </aside>
 
