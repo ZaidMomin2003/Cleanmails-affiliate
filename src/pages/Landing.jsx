@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { Zap, ArrowRight, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
-import { useState } from 'react'
+import { Zap, ArrowRight, ChevronDown, ChevronUp, ExternalLink, Moon, Sun } from 'lucide-react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import './Landing.css'
 
@@ -43,6 +43,12 @@ function Landing() {
   const navigate = useNavigate()
   const { user } = useAuth()
   const [openFaq, setOpenFaq] = useState(null)
+  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [dark])
 
   return (
     <div className="landing">
@@ -53,9 +59,14 @@ function Landing() {
             <Zap size={18} />
             <span>CleanMails</span>
           </div>
-          <button className="nav-cta" onClick={() => navigate(user ? '/app/dashboard' : '/login')}>
-            {user ? 'Go to app' : 'Join'}
-          </button>
+          <div className="nav-right">
+            <button className="nav-theme-toggle" onClick={() => setDark(!dark)} title={dark ? 'Light mode' : 'Dark mode'}>
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+            <button className="nav-cta" onClick={() => navigate(user ? '/app/dashboard' : '/login')}>
+              {user ? 'Go to app' : 'Join'}
+            </button>
+          </div>
         </div>
       </nav>
 

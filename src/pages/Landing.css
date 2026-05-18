@@ -15,6 +15,10 @@
   border-bottom: 1px solid var(--border);
 }
 
+[data-theme="dark"] .landing-nav {
+  background: rgba(10, 10, 11, 0.9);
+}
+
 .landing-nav-inner {
   max-width: 980px;
   margin: 0 auto;
@@ -48,6 +52,28 @@
 .nav-cta:hover {
   opacity: 0.9;
   transform: translateY(-1px);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-theme-toggle {
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.nav-theme-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 /* ---- Hero ---- */

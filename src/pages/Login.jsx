@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Zap, Eye, EyeOff } from 'lucide-react'
+import { Zap, Eye, EyeOff, Moon, Sun } from 'lucide-react'
 import { signUp, signIn, signInWithGoogle, resetPassword } from '../lib/auth'
 import './Login.css'
 
@@ -12,12 +12,18 @@ function Login() {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [showForgot, setShowForgot] = useState(false)
   const [resetSent, setResetSent] = useState(false)
+  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
   })
   const navigate = useNavigate()
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [dark])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -89,9 +95,14 @@ function Login() {
     return (
       <div className="login-page">
         <div className="login-card">
-          <div className="login-logo" onClick={() => navigate('/')}>
-            <Zap size={18} />
-            <span>CleanMails</span>
+          <div className="login-top-row">
+            <div className="login-logo" onClick={() => navigate('/')}>
+              <Zap size={18} />
+              <span>CleanMails</span>
+            </div>
+            <button className="login-theme-toggle" onClick={() => setDark(!dark)} title={dark ? 'Light mode' : 'Dark mode'}>
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
           </div>
 
           <h1>Reset password</h1>
@@ -131,9 +142,14 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <div className="login-logo" onClick={() => navigate('/')}>
-          <Zap size={18} />
-          <span>CleanMails</span>
+        <div className="login-top-row">
+          <div className="login-logo" onClick={() => navigate('/')}>
+            <Zap size={18} />
+            <span>CleanMails</span>
+          </div>
+          <button className="login-theme-toggle" onClick={() => setDark(!dark)} title={dark ? 'Light mode' : 'Dark mode'}>
+            {dark ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
         </div>
 
         <h1>{isSignup ? 'Create an account' : 'Sign in'}</h1>

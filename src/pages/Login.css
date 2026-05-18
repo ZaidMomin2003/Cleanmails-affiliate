@@ -24,9 +24,31 @@
   color: var(--primary);
   font-weight: 700;
   font-size: 0.95rem;
-  margin-bottom: 32px;
   cursor: pointer;
   letter-spacing: -0.02em;
+}
+
+.login-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.login-theme-toggle {
+  padding: 7px 9px;
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.login-theme-toggle:hover {
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 .login-card h1 {
