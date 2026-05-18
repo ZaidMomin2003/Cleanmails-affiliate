@@ -8,6 +8,7 @@ import Assets from './pages/Assets'
 import Payouts from './pages/Payouts'
 import Profile from './pages/Profile'
 import Leaderboard from './pages/Leaderboard'
+import Forum from './pages/Forum'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import NotFound from './pages/NotFound'
@@ -43,6 +44,7 @@ function App() {
         <Route path="assets" element={<Assets />} />
         <Route path="payouts" element={<Payouts />} />
         <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="forum" element={<Forum />} />
         <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="*" element={<NotFound />} />

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Trophy, Menu, X } from 'lucide-react'
+import { LayoutDashboard, Image, Wallet, LogOut, Zap, User, Trophy, Menu, X, Users } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { logOut } from '../lib/auth'
 import './Layout.css'
@@ -75,6 +75,10 @@ function Layout() {
             <NavLink to="/app/leaderboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
               <Trophy size={18} />
               <span>Leaderboard</span>
+            </NavLink>
+            <NavLink to="/app/forum" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={closeSidebar}>
+              <Users size={18} />
+              <span>Forum</span>
             </NavLink>
           </nav>
         </div>
