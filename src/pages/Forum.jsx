@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Plus, ExternalLink, X, Heart, MessageCircle } from 'lucide-react'
-import { collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, increment } from 'firebase/firestore'
+import { Plus, ExternalLink, X, MessageCircle } from 'lucide-react'
+import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore'
 import { db } from '../lib/firebase'
 import { useAuth } from '../context/AuthContext'
 import './Forum.css'
@@ -75,17 +75,6 @@ function Forum() {
     setSubmitting(false)
   }
 
-  async function handleLike(postId) {
-    try {
-      await updateDoc(doc(db, 'forumPosts', postId), {
-        likes: increment(1),
-      })
-      setPosts(posts.map(p => p.id === postId ? { ...p, likes: (p.likes || 0) + 1 } : p))
-    } catch (e) {
-      console.warn('Like failed:', e.message)
-    }
-  }
-
   return (
     <div className="forum-page">
       <div className="page-header">
@@ -121,10 +110,6 @@ function Forum() {
                 <span className="forum-author">by {post.authorName} · {formatTime(post.createdAt)}</span>
               </div>
               <div className="forum-card-actions">
-                <button className="forum-like-btn" onClick={() => handleLike(post.id)}>
-                  <Heart size={14} />
-                  <span>{post.likes || 0}</span>
-                </button>
                 <a href={post.url} target="_blank" rel="noopener noreferrer" className="forum-engage-btn">
                   <MessageCircle size={14} />
                   Engage
